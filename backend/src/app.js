@@ -1,5 +1,6 @@
 const express = require('express');
 const { getAllController, getByIdController } = require('./controllers/products.controller');
+const { getAllSalesController, getByIdSalesController } = require('./controllers/sales.controller');
 
 const app = express();
 
@@ -8,13 +9,23 @@ app.get('/', (_req, res) => {
   res.json({ status: 'Store Manager UP!' });
 });
 
-app.get('/products', (req, res) => {
-  const apiResponse = getAllController(req, res);
+app.get('/products', async (req, res) => {
+  const apiResponse = await getAllController(req, res);
   res.status(200).json(apiResponse);
 });
 
-app.get('/products/:id', (req, res) => {
-  const apiResponse = getByIdController(req, res);
+app.get('/products/:id', async (req, res) => {
+  const apiResponse = await getByIdController(req, res);
+  res.status(200).json(apiResponse);
+});
+
+app.get('/sales', async (req, res) => {
+  const apiResponse = await getAllSalesController(req, res);
+  res.status(200).json(apiResponse);
+});
+
+app.get('/sales/:id', async (req, res) => {
+  const apiResponse = await getByIdSalesController(req, res);
   res.status(200).json(apiResponse);
 });
 
