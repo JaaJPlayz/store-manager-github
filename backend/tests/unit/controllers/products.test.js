@@ -16,7 +16,7 @@ describe('Products Controller', function () {
   });
 
   it('Deve ser possível listar todos os produtos', async function () {
-    const stub = sinon.stub(productsService, 'getAllProducts').resolves(MOCK_PRODUCTS);
+    const stub = sinon.stub(productsService, 'getAllProducts').resolves({ status: 200, data: MOCK_PRODUCTS });
 
     const { body } = await chai.request('http://localhost:3001').get('/products');
 
@@ -25,7 +25,7 @@ describe('Products Controller', function () {
   });
 
   it('Deve ser possível pegar um produto pelo id', async function () {
-    const stub = sinon.stub(productsService, 'getProductById').resolves(MOCK_PRODUCTS[0]);
+    const stub = sinon.stub(productsService, 'getProductById').resolves({ status: 200, data: FIRST_PRODUCT_MOCK });
     const productId = 1;
 
     const { body } = await chai.request('http://localhost:3001').get(`/products/${productId}`);

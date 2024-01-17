@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http');
 const sinon = require('sinon');
 
 const productsService = require('../../../src/services/products.service');
+const productsModel = require('../../../src/models/products.model');
 
 const { expect } = chai;
 
@@ -16,31 +17,34 @@ describe('Products Service', function () {
   });
 
   it('Deve ser possível listar todos os produtos', async function () {
-    const stub = sinon.stub(productsService, 'getAllProducts').resolves(MOCK_PRODUCTS);
+    const stub = sinon.stub(productsModel, 'getAll').resolves(MOCK_PRODUCTS);
 
-    const { body } = await chai.request('http://localhost:3001').get('/products');
+    const products = await productsService.getAllProducts();
 
-    expect(body).to.be.deep.equal(MOCK_PRODUCTS);
+    expect(products).to.be.deep.equal({ status: 200, data: MOCK_PRODUCTS });
+
     stub.restore();
   });
 
   it('Deve ser possível pegar um produto pelo id', async function () {
     const productId = 1;
-    const stub = sinon.stub(productsService, 'getProductById').resolves(MOCK_PRODUCTS[0]);
+    const stub = sinon.stub(productsModel, 'findById').resolves(MOCK_PRODUCTS[0]);
 
-    const { body } = await chai.request('http://localhost:3001').get(`/products/${productId}`);
+    const product = await productsService.getProductById(productId);
 
-    expect(body).to.be.deep.equal(FIRST_PRODUCT_MOCK);
+    expect(product).to.be.deep.equal({ status: 200, data: FIRST_PRODUCT_MOCK });
+
     stub.restore();
   });
 
   it('Não deve ser possível pegar um produto com id inválido', async function () {
     const productId = 999;
-    const stub = sinon.stub(productsService, 'getProductById').resolves({ status: 404, data: { message: 'Product not found' } });
+    const stub = sinon.stub(productsModel, 'findById').resolves({ status: 404, data: { message: 'Product not found' } });
 
-    const { body } = await chai.request('http://localhost:3001').get(`/products/${productId}`);
+    const product = await productsService.getProductById(productId);
 
-    expect(body).to.be.deep.equal({ message: 'Product not found' });
+    expect(product).to.be.deep.equal({ status: 404, data: { message: 'Product not found' } });
+
     stub.restore();
   });
 });
