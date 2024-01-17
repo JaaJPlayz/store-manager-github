@@ -18,7 +18,13 @@ const FIRST_PRODUCT_MOCK = {
   name: 'Martelo de Thor',
 };
 
+const MOCK_FOR_SERVICES = {
+  status: 200,
+  data: MOCK_PRODUCTS,
+};
+
 module.exports = {
   FIRST_PRODUCT_MOCK,
   MOCK_PRODUCTS,
+  MOCK_FOR_SERVICES,
 };
