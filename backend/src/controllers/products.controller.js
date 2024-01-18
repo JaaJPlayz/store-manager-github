@@ -15,8 +15,6 @@ const getByIdController = async (req, res) => {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
     res.status(200).json(product);
-
-
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
