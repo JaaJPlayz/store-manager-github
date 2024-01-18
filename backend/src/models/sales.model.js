@@ -12,7 +12,7 @@ const getAllSales = async () => {
 };
 
 const findSaleById = async (id) => {
-  const [sale] = await connection.execute(
+  const [[sale]] = await connection.execute(
     `SELECT date, product_id AS productId, quantity, sale_id AS saleId
     FROM sales_products
     INNER JOIN sales
