@@ -1,12 +1,12 @@
-const { getAll, findById } = require('../models/products.model');
+const productsModel = require('../models/products.model');
 
 const getAllProducts = async () => {
-  const products = await getAll();
+  const products = await productsModel.getAll();
   return { status: 200, data: products };
 };
 
 const getProductById = async (id) => {
-  const product = await findById(id);
+  const product = await productsModel.findById(id);
   if (!product) {
     return { status: 404, data: { message: 'Product not found' } };
   }

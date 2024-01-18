@@ -37,15 +37,9 @@ const MOCK_FOR_SERVICES = {
   data: SALES_MOCK,
 };
 
-const MOCK_FOR_SERVICES_NOT_FOUND = {
-  status: 200,
-  data: SALE_NOT_FOUND_MOCK,
-};
-
 module.exports = {
   FIRST_SALE_MOCK,
   SALES_MOCK,
   MOCK_FOR_SERVICES,
   SALE_NOT_FOUND_MOCK,
-  MOCK_FOR_SERVICES_NOT_FOUND,
 };

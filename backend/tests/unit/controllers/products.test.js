@@ -32,6 +32,7 @@ describe('Testes para products controller', function () {
       const stub = sinon.stub(productsService, 'getAllProducts').resolves(MOCK_FOR_SERVICES);
       await productsController.getAllController(req, res);
       expect(res.status).to.have.been.calledWith(200);
+
       stub.restore();
     });
   
