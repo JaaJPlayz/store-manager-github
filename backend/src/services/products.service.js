@@ -1,16 +1,18 @@
 const productsModel = require('../models/products.model');
 
 const getAllProducts = async () => {
-  const products = await productsModel.getAll();
-  return { status: 200, data: products };
+  const result = await productsModel.getAll();
+  console.log('ඞඞඞඞඞඞ', result);
+  return result;
 };
 
 const getProductById = async (id) => {
   const product = await productsModel.findById(id);
   if (!product) {
-    return { status: 404, data: { message: 'Product not found' } };
+    const exception = new Error('Product not found');
+    exception.status = 400;
   }
-  return { status: 200, data: product };
+  return product;
 };
 
 module.exports = {

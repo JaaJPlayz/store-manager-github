@@ -1,32 +1,25 @@
 const express = require('express');
-const { getAllController, getByIdController } = require('./controllers/products.controller');
-const { getAllSalesController, getByIdSalesController } = require('./controllers/sales.controller');
+
+const productsRouter = require('./routes/products.router');
 
 const app = express();
+app.use(express.json());
+app.use(productsRouter);
 
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_req, res) => {
   res.json({ status: 'Store Manager UP!' });
 });
 
-app.get('/products', async (req, res) => {
-  const apiResponse = await getAllController(req, res);
-  res.status(200).json(apiResponse);
-});
+app.use('/', productsRouter);
+// app.get('/sales', async (req, res) => {
+//   const apiResponse = await salesController.getAllSalesController;
+//   res.status(200).json(apiResponse);
+// });
 
-app.get('/products/:id', async (req, res) => {
-  const apiResponse = await getByIdController(req, res);
-  res.status(200).json(apiResponse);
-});
-
-app.get('/sales', async (req, res) => {
-  const apiResponse = await getAllSalesController(req, res);
-  res.status(200).json(apiResponse);
-});
-
-app.get('/sales/:id', async (req, res) => {
-  const apiResponse = await getByIdSalesController(req, res);
-  res.status(200).json(apiResponse);
-});
+// app.get('/sales/:id', async (req, res) => {
+//   const apiResponse = await salesController.getByIdSalesController;
+//   res.status(200).json(apiResponse);
+// });
 
 module.exports = app;
