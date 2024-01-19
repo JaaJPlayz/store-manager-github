@@ -5,7 +5,12 @@ const productsModel = require('../../../src/models/products.model');
 
 const { expect } = chai;
 
-const { FIRST_PRODUCT_MOCK, MOCK_PRODUCTS, PRODUCT_NOT_FOUND_MOCK } = require('../mocks/products.mock');
+const {
+  FIRST_PRODUCT_MOCK,
+  MOCK_PRODUCTS,
+  PRODUCT_NOT_FOUND_MOCK,
+  INSERT_PRODUCT_MOCK, 
+} = require('../mocks/products.mock');
 
 describe('Products Service', function () {
   afterEach(function () {
@@ -39,6 +44,26 @@ describe('Products Service', function () {
     const result = await productsModel.findById(999);
 
     expect(result).to.be.deep.equal(PRODUCT_NOT_FOUND_MOCK);
+
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir um novo produto', async function () {
+    const stub = sinon.stub(productsModel, 'insertNewProduct').returns(INSERT_PRODUCT_MOCK);
+
+    const result = await productsModel.insertNewProduct('Bolo de cenoura');
+
+    expect(result).to.be.deep.equal(INSERT_PRODUCT_MOCK);
+
+    stub.restore();
+  });
+
+  it('Não deve ser possível adicionart um produto com nome inválido', async function () {
+    const stub = sinon.stub(productsModel, 'insertNewProduct').returns(null);
+
+    const result = await productsModel.insertNewProduct('');
+
+    expect(result).to.be.deep.equal(null);
 
     stub.restore();
   });

@@ -18,6 +18,11 @@ const FIRST_PRODUCT_MOCK = {
   name: 'Martelo de Thor',
 };
 
+const INSERT_PRODUCT_MOCK = {
+  id: 4,
+  name: 'Bolo de cenoura',
+};
+
 const PRODUCT_NOT_FOUND_MOCK = {
   message: 'Product not found',
 };
@@ -36,6 +41,7 @@ module.exports = {
   FIRST_PRODUCT_MOCK,
   MOCK_PRODUCTS,
   MOCK_FOR_SERVICES,
+  INSERT_PRODUCT_MOCK,
   PRODUCT_NOT_FOUND_MOCK,
   MOCK_FOR_SERVICES_NOT_FOUND,
 };

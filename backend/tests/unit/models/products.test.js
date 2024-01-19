@@ -1,6 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
-const { FIRST_PRODUCT_MOCK, MOCK_PRODUCTS } = require('../mocks/products.mock');
+const { FIRST_PRODUCT_MOCK, MOCK_PRODUCTS, INSERT_PRODUCT_MOCK } = require('../mocks/products.mock');
 
 const { expect } = chai;
 const ProductsModel = require('../../../src/models/products.model');
@@ -35,6 +35,14 @@ describe('Products Model', function () {
     const product = await ProductsModel.findById(1);
 
     expect(product).to.be.deep.equal(FIRST_PRODUCT_MOCK);
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir um novo produto', async function () {
+    const stub = sinon.stub(ProductsModel, 'insertNewProduct').returns(INSERT_PRODUCT_MOCK);
+    const product = await ProductsModel.insertNewProduct('Bolo de cenoura');
+
+    expect(product).to.be.deep.equal(INSERT_PRODUCT_MOCK);
     stub.restore();
   });
 });

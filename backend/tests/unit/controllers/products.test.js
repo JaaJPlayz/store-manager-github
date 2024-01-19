@@ -74,4 +74,44 @@ describe('Testes para products controller', function () {
       stub.restore();
     });
   });
+
+  describe('Quando o produto é inserido com sucesso', function () {
+    it('Retorna o produto inserido', async function () {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub().returnsThis(),
+      };
+      const req = {
+        body:
+        {
+          name: 'Bolo de cenoura',
+        },
+      };
+      const stub = sinon.stub(productsService, 'insertNewProduct').resolves(MOCK_FOR_SERVICES);
+      await productsController.insertNewProduct(req, res);
+  
+      expect(res.status).to.have.been.calledWith(201);
+      stub.restore();
+    });
+  });
+
+  describe('Quando o produto não é inserido com sucesso', function () {
+    it('Retorna uma mensagem de erro', async function () {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub().returnsThis(),
+      };
+      const req = {
+        body:
+        {
+          name: '',
+        },
+      };
+      const stub = sinon.stub(productsService, 'insertNewProduct').resolves(null);
+      await productsController.insertNewProduct(req, res);
+  
+      expect(res.status).to.have.been.calledWith(422);
+      stub.restore();
+    });
+  });
 });

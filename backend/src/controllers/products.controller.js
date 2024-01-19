@@ -22,7 +22,21 @@ const getByIdController = async (req, res) => {
   }
 };
 
+const insertNewProduct = async (req, res) => {
+  const { name } = req.body;
+  try {
+    const newProduct = await productsService.insertNewProduct(name);
+    if (name === '') {
+      return res.status(422).json({ message: 'Product name is required' });
+    }
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllController,
   getByIdController,
+  insertNewProduct,
 };
