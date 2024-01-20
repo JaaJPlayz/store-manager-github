@@ -25,10 +25,13 @@ const getByIdController = async (req, res) => {
 const insertNewProduct = async (req, res) => {
   const { name } = req.body;
   try {
-    const newProduct = await productsService.insertNewProduct(name);
-    if (name === '') {
-      return res.status(422).json({ message: 'Product name is required' });
+    if (!name || name === undefined) {
+      return res.status(400).json({ message: '"name" is required' });
     }
+    if (name.length < 5) {
+      return res.status(422).json({ message: '"name" length must be at least 5 characters long' });
+    }
+    const newProduct = await productsService.insertNewProduct(name);
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });

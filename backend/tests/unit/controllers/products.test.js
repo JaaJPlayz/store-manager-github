@@ -96,21 +96,37 @@ describe('Testes para products controller', function () {
   });
 
   describe('Quando o produto não é inserido com sucesso', function () {
-    it('Retorna uma mensagem de erro', async function () {
+    it('Sem nome', async function () {
       const res = {
         status: sinon.stub().returnsThis(),
-        json: sinon.stub().returnsThis(),
+        json: sinon.stub(),
       };
       const req = {
-        body:
-        {
-          name: '',
+        body: {},
+      };
+      const stub = sinon.stub(productsService, 'insertNewProduct').resolves(null);
+      await productsController.insertNewProduct(req, res);
+  
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+      stub.restore();
+    });
+    
+    it('Nome com menos de 5 caracteres', async function () {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+      const req = {
+        body: {
+          name: 'hjkl',
         },
       };
       const stub = sinon.stub(productsService, 'insertNewProduct').resolves(null);
       await productsController.insertNewProduct(req, res);
   
       expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
       stub.restore();
     });
   });
