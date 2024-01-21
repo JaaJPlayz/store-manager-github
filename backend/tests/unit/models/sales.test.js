@@ -11,10 +11,44 @@ const { FIRST_SALE_MOCK,
 
 const { expect } = chai;
 const salesModel = require('../../../src/models/sales.model');
+const connection = require('../../../src/models/connection');
 
 describe('Sales Model', function () {
   afterEach(function () {
     sinon.restore();
+  });
+
+  it('Deve retornar um produto pelo id utilizando a connection mockada', async function () {
+    const stub = sinon.stub(connection, 'execute').resolves([SALES_MOCK]);
+
+    const products = await salesModel.findSaleById(1);
+
+    expect(products).to.be.an('array');
+    expect(products).to.be.deep.equal(SALES_MOCK);
+
+    stub.restore();
+  });
+
+  it('Deve retornar todos os produtos utilizando a connection mockada', async function () {
+    const stub = sinon.stub(connection, 'execute').resolves([SALES_MOCK]);
+
+    const products = await salesModel.getAllSales();
+
+    expect(products).to.be.an('array');
+    expect(products).to.be.deep.equal(SALES_MOCK);
+
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir um produto utilizando a connection mockada', async function () {
+    const stub = sinon.stub(connection, 'execute').resolves([SALES_MOCK]);
+
+    const products = await salesModel.insertNewSale(INSERT_ONE_SALE_MOCK);
+
+    expect(products).to.be.an('array');
+    expect(products).to.be.deep.equal(SALES_MOCK);
+
+    stub.restore();
   });
 
   it('Deve ser possível listar todas as sales', async function () {
