@@ -19,8 +19,19 @@ const insertNewProduct = async (name) => {
   return newProduct;
 };
 
+const updateProductName = async (id, name) => {
+  const product = await productsModel.findById(id);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+  await productsModel.updateProductName(id, name);
+  const updatedProduct = await productsModel.findById(id);
+  return updatedProduct;
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   insertNewProduct,
+  updateProductName,
 };

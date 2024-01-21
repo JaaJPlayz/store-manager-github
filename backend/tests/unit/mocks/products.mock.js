@@ -13,6 +13,15 @@ const MOCK_PRODUCTS = [
   },
 ];
 
+const MOCK_UPDATE_INPUT = {
+  name: 'Bombril de ouro',
+};
+
+const MOCK_UPDATE_OUTPUT = {
+  id: 1,
+  name: 'Bombril de ouro',
+};
+
 const FIRST_PRODUCT_MOCK = {
   id: 1,
   name: 'Martelo de Thor',
@@ -38,9 +47,11 @@ const MOCK_FOR_SERVICES_NOT_FOUND = {
 };
 
 module.exports = {
-  FIRST_PRODUCT_MOCK,
   MOCK_PRODUCTS,
   MOCK_FOR_SERVICES,
+  MOCK_UPDATE_INPUT,
+  MOCK_UPDATE_OUTPUT,
+  FIRST_PRODUCT_MOCK,
   INSERT_PRODUCT_MOCK,
   PRODUCT_NOT_FOUND_MOCK,
   MOCK_FOR_SERVICES_NOT_FOUND,
