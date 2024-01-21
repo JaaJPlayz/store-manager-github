@@ -8,7 +8,17 @@ const { expect } = chai;
 const salesService = require('../../../src/services/sales.service');
 const salesController = require('../../../src/controllers/sales.controller');
 
-const { FIRST_SALE_MOCK, SALES_MOCK, SALE_NOT_FOUND_MOCK } = require('../mocks/sales.mock');
+const { 
+  SALES_MOCK,
+  FIRST_SALE_MOCK,
+  SALE_NOT_FOUND_MOCK,
+  INSERT_ONE_SALE_MOCK,
+  INSERT_TWO_SALES_MOCK,
+  RESULT_INSERT_ONE_SALE_MOCK,
+  RESULT_INSERT_TWO_SALES_MOCK,
+  RESULT_NEW_INSERT_ONE_SALE_MOCK,
+  RESULT_NEW_INSERT_TWO_SALES_MOCK,
+} = require('../mocks/sales.mock');
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -71,6 +81,40 @@ describe('Testes para sales controller', function () {
   
       expect(res.status).to.have.been.calledWith(200);
       stub.restore();
+    });
+  });
+
+  describe('Quando a venda é inserida com sucesso', function () {
+    it('Deve ser possível inserir uma venda', async function () {
+      const req = {
+        body: INSERT_ONE_SALE_MOCK,
+      };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub().returnsThis(),
+      };
+      const stub = sinon.stub(salesService, 'insertProductIntoSale').resolves(RESULT_INSERT_ONE_SALE_MOCK);
+      const stub2 = sinon.stub(salesService, 'getSaleByIdService').resolves(RESULT_NEW_INSERT_ONE_SALE_MOCK);
+      await salesController.insertSale(req, res);
+      expect(res.status).to.have.been.calledWith(201);
+      stub.restore();
+      stub2.restore();
+    });
+
+    it('Deve ser possível inserir duas vendas', async function () {
+      const req = {
+        body: INSERT_TWO_SALES_MOCK,
+      };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub().returnsThis(),
+      };
+      const stub = sinon.stub(salesService, 'insertProductIntoSale').resolves(RESULT_INSERT_TWO_SALES_MOCK);
+      const stub2 = sinon.stub(salesService, 'getSaleByIdService').resolves(RESULT_NEW_INSERT_TWO_SALES_MOCK);
+      await salesController.insertSale(req, res);
+      expect(res.status).to.have.been.calledWith(201);
+      stub.restore();
+      stub2.restore();
     });
   });
 });

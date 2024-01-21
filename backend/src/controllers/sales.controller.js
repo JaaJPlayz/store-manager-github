@@ -22,7 +22,20 @@ const getSaleById = async (req, res) => {
   }
 };
 
+const insertSale = async (req, res) => {
+  const sale = req.body;
+  try {
+    const insertedSaleID = await salesService.insertProductIntoSale(sale);
+    const productsSold = await salesService.getSaleByIdService(insertedSaleID)
+      .then((item) => item.map(({ productId, quantity }) => ({ productId, quantity })));
+    res.status(201).json({ id: insertedSaleID, itemsSold: productsSold });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllSales,
   getSaleById,
+  insertSale,
 };

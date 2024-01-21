@@ -1,6 +1,13 @@
 const chai = require('chai');
 const sinon = require('sinon');
-const { FIRST_SALE_MOCK, SALES_MOCK, SALE_NOT_FOUND_MOCK } = require('../mocks/sales.mock');
+const { FIRST_SALE_MOCK,
+  SALES_MOCK,
+  SALE_NOT_FOUND_MOCK,
+  INSERT_ONE_SALE_MOCK,
+  INSERT_TWO_SALES_MOCK,
+  RESULT_INSERT_ONE_SALE_MOCK,
+  RESULT_INSERT_TWO_SALES_MOCK,
+} = require('../mocks/sales.mock');
 
 const { expect } = chai;
 const salesModel = require('../../../src/models/sales.model');
@@ -35,6 +42,22 @@ describe('Sales Model', function () {
     const product = await salesModel.findSaleById(1);
 
     expect(product).to.be.deep.equal(FIRST_SALE_MOCK);
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir uma sale', async function () {
+    const stub = sinon.stub(salesModel, 'insertNewSale').returns(RESULT_INSERT_ONE_SALE_MOCK);
+    const product = await salesModel.insertNewSale(INSERT_ONE_SALE_MOCK);
+
+    expect(product).to.be.deep.equal(RESULT_INSERT_ONE_SALE_MOCK);
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir duas sales', async function () {
+    const stub = sinon.stub(salesModel, 'insertNewSale').returns(RESULT_INSERT_TWO_SALES_MOCK);
+    const product = await salesModel.insertNewSale(INSERT_TWO_SALES_MOCK);
+
+    expect(product).to.be.deep.equal(RESULT_INSERT_TWO_SALES_MOCK);
     stub.restore();
   });
 });

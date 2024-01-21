@@ -1,44 +1,72 @@
 const chai = require('chai');
 const sinon = require('sinon');
 
-const productsService = require('../../../src/services/sales.service');
+const salesModel = require('../../../src/models/sales.model');
 
 const { expect } = chai;
 
-const { FIRST_SALE_MOCK, SALES_MOCK, SALE_NOT_FOUND_MOCK } = require('../mocks/sales.mock');
+const { 
+  FIRST_SALE_MOCK,
+  SALES_MOCK,
+  SALE_NOT_FOUND_MOCK,
+  INSERT_ONE_SALE_MOCK,
+  INSERT_TWO_SALES_MOCK,
+  RESULT_INSERT_ONE_SALE_MOCK,
+  RESULT_INSERT_TWO_SALES_MOCK,
+} = require('../mocks/sales.mock');
 
 describe('Sales Service', function () {
   afterEach(function () {
     sinon.restore();
   });
 
-  it('Deve ser possível listar todos os produtos', async function () {
-    const stub = sinon.stub(productsService, 'getAllSalesService').returns(SALES_MOCK);
+  it('Deve ser possível listar todas as sales', async function () {
+    const stub = sinon.stub(salesModel, 'getAllSales').returns(SALES_MOCK);
 
-    const result = await productsService.getAllSalesService();
+    const products = await salesModel.getAllSales();
 
-    expect(result).to.be.an('array');
-    expect(result).to.be.deep.equal(SALES_MOCK);
+    expect(products).to.be.an('array');
+    expect(products).to.be.deep.equal(SALES_MOCK);
 
     stub.restore();
   });
 
   it('Deve ser possível pegar um produto pelo id', async function () {
-    const stub = sinon.stub(productsService, 'getSaleByIdService').returns(FIRST_SALE_MOCK);
+    const stub = sinon.stub(salesModel, 'findSaleById').returns(FIRST_SALE_MOCK);
 
-    const result = await productsService.getSaleByIdService(1);
+    const product = await salesModel.findSaleById(1);
 
-    expect(result).to.be.deep.equal(FIRST_SALE_MOCK);
+    expect(product).to.be.deep.equal(FIRST_SALE_MOCK);
 
     stub.restore();
   });
 
   it('Não deve ser possível pegar um produto com id inválido', async function () {
-    const stub = sinon.stub(productsService, 'getSaleByIdService').returns(SALE_NOT_FOUND_MOCK);
+    const stub = sinon.stub(salesModel, 'findSaleById').returns(SALE_NOT_FOUND_MOCK);
 
-    const result = await productsService.getSaleByIdService(999);
+    const product = await salesModel.findSaleById(999);
 
-    expect(result).to.be.deep.equal(SALE_NOT_FOUND_MOCK);
+    expect(product).to.be.deep.equal(SALE_NOT_FOUND_MOCK);
+
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir uma sale', async function () {
+    const stub = sinon.stub(salesModel, 'insertNewSale').returns(RESULT_INSERT_ONE_SALE_MOCK);
+
+    const product = await salesModel.insertNewSale(INSERT_ONE_SALE_MOCK);
+
+    expect(product).to.be.deep.equal(RESULT_INSERT_ONE_SALE_MOCK);
+
+    stub.restore();
+  });
+
+  it('Deve ser possível inserir duas sales', async function () {
+    const stub = sinon.stub(salesModel, 'insertNewSale').returns(RESULT_INSERT_TWO_SALES_MOCK);
+
+    const product = await salesModel.insertNewSale(INSERT_TWO_SALES_MOCK);
+
+    expect(product).to.be.deep.equal(RESULT_INSERT_TWO_SALES_MOCK);
 
     stub.restore();
   });

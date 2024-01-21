@@ -7,5 +7,6 @@ router.use(express.json());
 
 router.get('/sales', salesController.getAllSales);
 router.get('/sales/:id', salesController.getSaleById);
+router.post('/sales', salesController.insertSale);
 
 module.exports = router;
