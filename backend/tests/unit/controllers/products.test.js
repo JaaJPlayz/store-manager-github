@@ -8,12 +8,7 @@ const { expect } = chai;
 const productsService = require('../../../src/services/products.service');
 const productsController = require('../../../src/controllers/products.controller');
 
-const { 
-  FIRST_PRODUCT_MOCK,
-  MOCK_FOR_SERVICES,
-  MOCK_FOR_SERVICES_NOT_FOUND,
-  MOCK_UPDATE_OUTPUT,
-} = require('../mocks/products.mock');
+const { FIRST_PRODUCT_MOCK, MOCK_FOR_SERVICES, MOCK_FOR_SERVICES_NOT_FOUND, MOCK_UPDATE_OUTPUT } = require('../mocks/products.mock');
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -25,11 +20,7 @@ describe('Testes para products controller', function () {
 
   describe('Quando o produto está presente na base de dados', function () {
     it('Retorna todos os produtos', async function () {
-      const req = {
-        params: {
-          id: 1,
-        },
-      };
+      const req = { params: { id: 1 } };
       const res = {
         status: sinon.stub().returnsThis(),
         json: sinon.stub().returnsThis(),
@@ -227,16 +218,30 @@ describe('Testes para products controller', function () {
         status: sinon.stub().returnsThis(),
         json: sinon.stub().returnsThis(),
       };
-      const req = {
-        params: {
-          id: 1,
-        },
-      };
-      const stub = sinon.stub(productsService, 'removeProduct').resolves(null);
+      const req = { params: { id: 1 } };
+      const stub = sinon.stub(productsService, 'removeProduct').resolves(FIRST_PRODUCT_MOCK);
       await productsController.deleteProductController(req, res);
   
       expect(res.status).to.have.been.calledWith(204);
       stub.restore();
+      sinon.restore();
+    });
+  });
+
+  describe('Quando o produto não é deletado com sucesso', function () { // ESSA FUNCTION ESTA COM ERRO TEM QUE ARRUMAR 1!!111!11!1
+    it('Quando o produto vem com o nome vazio', async function () {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+      const req = { params: { id: 1 } };
+      const stub = sinon.stub(productsService, 'removeProduct').resolves(null);
+      await productsController.deleteProductController(req, res);
+  
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+      stub.restore();
+      sinon.restore();
     });
   });
 });

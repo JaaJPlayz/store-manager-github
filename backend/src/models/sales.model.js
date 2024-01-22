@@ -36,8 +36,7 @@ const insertProductIntoSale = async (nextID, createdSale) => {
     const SQLquery = createdSale.map((sale) => {
       const { productId, quantity } = sale;
       return connection.execute(
-        `INSERT INTO sales_products (sale_id, product_id, quantity)
-        VALUES (?, ?, ?)`,
+        'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
         [nextID, productId, quantity],
       );
     });

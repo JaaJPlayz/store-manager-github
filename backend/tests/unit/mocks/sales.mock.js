@@ -6,6 +6,12 @@ const FIRST_SALE_MOCK = {
   quantity: 5,
 };
 
+const MOCK_FOR_UPDATE_SALE = {
+  saleId: 3,
+  productId: 3,
+  quantity: 23,
+};
+
 const SALES_MOCK = [
   {
     id: 1,
@@ -85,6 +91,7 @@ module.exports = {
   MOCK_FOR_SERVICES,
   SALE_NOT_FOUND_MOCK,
   INSERT_ONE_SALE_MOCK,
+  MOCK_FOR_UPDATE_SALE,
   INSERT_TWO_SALES_MOCK,
   RESULT_INSERT_ONE_SALE_MOCK,
   RESULT_INSERT_TWO_SALES_MOCK,

@@ -2,6 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 
 const salesModel = require('../../../src/models/sales.model');
+const salesService = require('../../../src/services/sales.service');
 
 const { expect } = chai;
 
@@ -23,7 +24,7 @@ describe('Sales Service', function () {
   it('Deve ser possível listar todas as sales', async function () {
     const stub = sinon.stub(salesModel, 'getAllSales').returns(SALES_MOCK);
 
-    const products = await salesModel.getAllSales();
+    const products = await salesService.getAllSalesService();
 
     expect(products).to.be.an('array');
     expect(products).to.be.deep.equal(SALES_MOCK);
@@ -31,10 +32,10 @@ describe('Sales Service', function () {
     stub.restore();
   });
 
-  it('Deve ser possível pegar um produto pelo id', async function () {
+  it('Deve ser possível pegar uma sale pelo id', async function () {
     const stub = sinon.stub(salesModel, 'findSaleById').returns(FIRST_SALE_MOCK);
 
-    const product = await salesModel.findSaleById(1);
+    const product = await salesService.getSaleByIdService(1);
 
     expect(product).to.be.deep.equal(FIRST_SALE_MOCK);
 
@@ -44,7 +45,7 @@ describe('Sales Service', function () {
   it('Não deve ser possível pegar um produto com id inválido', async function () {
     const stub = sinon.stub(salesModel, 'findSaleById').returns(SALE_NOT_FOUND_MOCK);
 
-    const product = await salesModel.findSaleById(999);
+    const product = await salesService.getSaleByIdService(999);
 
     expect(product).to.be.deep.equal(SALE_NOT_FOUND_MOCK);
 

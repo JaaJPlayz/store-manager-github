@@ -43,7 +43,7 @@ describe('Products Service', function () {
   it('Não deve ser possível pegar um produto com id inválido', async function () {
     const stub = sinon.stub(productsModel, 'findById').returns(PRODUCT_NOT_FOUND_MOCK);
 
-    const result = await productsModel.findById(999);
+    const result = await productsService.getProductById(999);
 
     expect(result).to.be.deep.equal(PRODUCT_NOT_FOUND_MOCK);
 
@@ -63,32 +63,39 @@ describe('Products Service', function () {
   it('Não deve ser possível adicionar um produto com nome inválido', async function () {
     const stub = sinon.stub(productsModel, 'insertNewProduct').returns(null);
 
-    const result = await productsModel.insertNewProduct('');
-
-    expect(result).to.be.deep.equal(null);
+    try {
+      await productsService.insertNewProduct('');
+    } catch (err) {
+      expect(err).to.be.an('error');
+      expect(err.message).to.be.equal('Product name is required');
+    }
 
     stub.restore();
   });
 
   it('Deve ser possível atualizar o nome de um produto', async function () {
-    const stub = sinon.stub(productsModel, 'updateProductName').returns(MOCK_UPDATE_OUTPUT);
+    sinon.stub(productsModel, 'findById')
+      .onFirstCall()
+      .returns(FIRST_PRODUCT_MOCK)
+      .onSecondCall()
+      .returns(MOCK_UPDATE_OUTPUT);
 
-    const result = await productsModel.updateProductName(1, 'Bombril de ouro');
+    sinon.stub(productsModel, 'updateProductName').returns(Promise.resolve());
 
-    expect(result).to.be.deep.equal(MOCK_UPDATE_OUTPUT);
+    const result = await productsService.updateProductName(FIRST_PRODUCT_MOCK);
 
-    stub.restore();
+    expect(result).to.be.equal(MOCK_UPDATE_OUTPUT);
   });
 
   it('Não deve ser possível atualizar o nome de um produto que não existe', async function () {
-    const stub = sinon.stub(productsModel, 'updateProductName')
-      .returns({ status: 404, data: 'Product not found' });
-      
-    const result = await productsModel.updateProductName(999, 'Bombril de ouro');
+    sinon.stub(productsModel, 'findById').returns(null);
 
-    expect(result).to.be.deep.equal({ status: 404, data: 'Product not found' });
-
-    stub.restore();
+    try {
+      await productsService.updateProductName(999, 'Bombril de ouro');
+    } catch (err) {
+      expect(err).to.be.an('error');
+      expect(err.message).to.be.equal('Product not found');
+    }
   });
 
   it('Não deve ser possível atualizar o nome de um produto com um nome menor que 5 caracteres', async function () {
