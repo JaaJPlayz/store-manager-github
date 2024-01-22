@@ -46,6 +46,10 @@ const MOCK_FOR_SERVICES_NOT_FOUND = {
   data: MOCK_PRODUCTS,
 };
 
+const MOCK_PRODUCT_NOT_FOUND = {
+  status: 404, data: 'Product not found', 
+};
+
 module.exports = {
   MOCK_PRODUCTS,
   MOCK_FOR_SERVICES,
@@ -53,6 +57,7 @@ module.exports = {
   MOCK_UPDATE_OUTPUT,
   FIRST_PRODUCT_MOCK,
   INSERT_PRODUCT_MOCK,
+  MOCK_PRODUCT_NOT_FOUND,
   PRODUCT_NOT_FOUND_MOCK,
   MOCK_FOR_SERVICES_NOT_FOUND,
 };

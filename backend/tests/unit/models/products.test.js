@@ -5,14 +5,35 @@ const {
   MOCK_PRODUCTS,
   INSERT_PRODUCT_MOCK,
   MOCK_UPDATE_OUTPUT,
+  MOCK_PRODUCT_NOT_FOUND,
 } = require('../mocks/products.mock');
 
 const { expect } = chai;
 const ProductsModel = require('../../../src/models/products.model');
+const connection = require('../../../src/models/connection');
 
 describe('Products Model', function () {
   afterEach(function () {
     sinon.restore();
+  });
+
+  it('Deve ser possível listar todos os produtos por meio da connection mockada', async function () {
+    const stub = sinon.stub(connection, 'execute').resolves([MOCK_PRODUCTS]);
+
+    const products = await ProductsModel.getAll();
+
+    expect(products).to.be.an('array');
+    expect(products).to.be.deep.equal(MOCK_PRODUCTS);
+
+    stub.restore();
+  });
+
+  it('Deve ser possível pegar um produto pelo id por meio da connection mockada', async function () {
+    const stub = sinon.stub(connection, 'execute').resolves([[FIRST_PRODUCT_MOCK]]);
+    const product = await ProductsModel.findById(1);
+
+    expect(product).to.be.deep.equal(FIRST_PRODUCT_MOCK);
+    stub.restore();
   });
 
   it('Deve ser possível listar todos os produtos', async function () {
@@ -61,11 +82,11 @@ describe('Products Model', function () {
 
   it('Não deve ser possível atualizar o nome de um produto que não existe', async function () {
     const stub = sinon.stub(ProductsModel, 'updateProductName')
-      .returns({ status: 404, data: 'Product not found' });
+      .returns(MOCK_PRODUCT_NOT_FOUND);
       
     const product = await ProductsModel.updateProductName(999, 'Bombril de ouro');
 
-    expect(product).to.be.deep.equal({ status: 404, data: 'Product not found' });
+    expect(product).to.be.deep.equal(MOCK_PRODUCT_NOT_FOUND);
     stub.restore();
   });
 
@@ -85,6 +106,16 @@ describe('Products Model', function () {
     const product = await ProductsModel.removeProduct(1);
 
     expect(product).to.be.deep.equal({ status: 200, data: 'Product deleted successfully' });
+    stub.restore();
+  });
+
+  it('Não deve ser possível remover um produto que não existe', async function () {
+    const stub = sinon.stub(ProductsModel, 'removeProduct')
+      .returns(MOCK_PRODUCT_NOT_FOUND);
+
+    const product = await ProductsModel.removeProduct(999);
+
+    expect(product).to.be.deep.equal(MOCK_PRODUCT_NOT_FOUND);
     stub.restore();
   });
 });
